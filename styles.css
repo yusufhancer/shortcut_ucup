@@ -458,6 +458,7 @@ h1 {
   place-items: center;
   padding: 16px;
   background: rgba(0, 0, 0, .58);
+  overflow: auto;
 }
 
 .modal-backdrop[hidden] {
@@ -466,6 +467,8 @@ h1 {
 
 .shortcut-dialog {
   width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--surface);
@@ -476,7 +479,9 @@ h1 {
 
 .shortcut-dialog form {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 18px;
+  max-height: calc(100vh - 72px);
 }
 
 .dialog-head,
@@ -489,6 +494,27 @@ h1 {
 
 .dialog-head h2 {
   margin: 0;
+}
+
+.dialog-body {
+  display: grid;
+  gap: 18px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.dialog-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dialog-body::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.dialog-actions {
+  padding-top: 4px;
 }
 
 label {

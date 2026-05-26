@@ -118,50 +118,52 @@
         </button>
       </div>
 
-      <input id="shortcutId" type="hidden">
+      <div class="dialog-body">
+        <input id="shortcutId" type="hidden">
 
-      <label>
-        Nama
-        <input id="nameInput" type="text" placeholder="Contoh: YouTube" required maxlength="32">
-      </label>
+        <label>
+          Nama
+          <input id="nameInput" type="text" placeholder="Contoh: YouTube" required maxlength="32">
+        </label>
 
-      <label>
-        URL
-        <input id="urlInput" type="url" placeholder="https://youtube.com" required>
-      </label>
+        <label>
+          URL
+          <input id="urlInput" type="url" placeholder="https://youtube.com" required>
+        </label>
 
-      <label>
-        Logo
-        <input id="logoInput" type="text" placeholder="Emoji, huruf, atau URL gambar">
-      </label>
+        <label>
+          Logo
+          <input id="logoInput" type="text" placeholder="Emoji, huruf, atau URL gambar">
+        </label>
 
-      <label class="check-row">
-        <input id="pinnedInput" type="checkbox">
-        Pin shortcut ke atas
-      </label>
+        <label class="check-row">
+          <input id="pinnedInput" type="checkbox">
+          Pin shortcut ke atas
+        </label>
 
-      <label>
-        Kategori
-        <div class="category-options" id="categoryInput">
-          <label><input type="checkbox" value="Umum"> Umum</label>
-          <label><input type="checkbox" value="AI"> AI</label>
-          <label><input type="checkbox" value="Hiburan"> Hiburan</label>
-          <label><input type="checkbox" value="Coding"> Coding</label>
-          <label><input type="checkbox" value="Sosial"> Sosial</label>
-          <label><input type="checkbox" value="Kerja"> Kerja</label>
-          <label><input type="checkbox" value="Belajar"> Belajar</label>
-        </div>
-      </label>
+        <label>
+          Kategori
+          <div class="category-options" id="categoryInput">
+            <label><input type="checkbox" value="Umum"> Umum</label>
+            <label><input type="checkbox" value="AI"> AI</label>
+            <label><input type="checkbox" value="Hiburan"> Hiburan</label>
+            <label><input type="checkbox" value="Coding"> Coding</label>
+            <label><input type="checkbox" value="Sosial"> Sosial</label>
+            <label><input type="checkbox" value="Kerja"> Kerja</label>
+            <label><input type="checkbox" value="Belajar"> Belajar</label>
+          </div>
+        </label>
 
-      <label>
-        Catatan
-        <textarea id="noteInput" rows="2" placeholder="Contoh: untuk rangkum materi, coding, hiburan, atau kerja"></textarea>
-      </label>
+        <label>
+          Catatan
+          <textarea id="noteInput" rows="2" placeholder="Contoh: untuk rangkum materi, coding, hiburan, atau kerja"></textarea>
+        </label>
 
-      <label>
-        Session
-        <textarea id="sessionInput" rows="3" placeholder="Catatan session lokal, token pribadi, atau info login yang ingin disimpan di browser ini"></textarea>
-      </label>
+        <label>
+          Session
+          <textarea id="sessionInput" rows="3" placeholder="Catatan session lokal, token pribadi, atau info login yang ingin disimpan di browser ini"></textarea>
+        </label>
+      </div>
 
       <div class="dialog-actions">
         <button class="secondary-btn" id="cancelBtn" type="button">Batal</button>
