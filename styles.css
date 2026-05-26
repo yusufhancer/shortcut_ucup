@@ -194,10 +194,28 @@ h1 {
   background: var(--brand-strong);
 }
 
+.action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.action-bar .primary-btn,
+.action-bar .secondary-btn {
+  min-height: 44px;
+  padding: 0 18px;
+}
+
 .secondary-btn {
   border: 1px solid var(--line);
   background: transparent;
   color: var(--text);
+}
+
+.secondary-btn.active {
+  border-color: var(--brand);
+  background: rgba(159, 196, 255, .13);
 }
 
 .danger-btn {
@@ -292,6 +310,20 @@ h1 {
   transition: transform .18s ease, border-color .18s ease, background .18s ease;
 }
 
+.shortcut-card.dragging {
+  opacity: .55;
+  transform: scale(.98);
+}
+
+.shortcut-card.selecting {
+  padding-top: 46px;
+}
+
+.shortcut-card.selected {
+  border-color: var(--brand);
+  background: rgba(159, 196, 255, .12);
+}
+
 .shortcut-card:hover {
   transform: translateY(-3px);
   border-color: var(--brand);
@@ -324,6 +356,14 @@ h1 {
   font: 700 21px Consolas, "SFMono-Regular", ui-monospace, monospace;
 }
 
+.shortcut-note {
+  max-width: 100%;
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
 .shortcut-category {
   margin: 0;
   border: 1px solid var(--line);
@@ -332,6 +372,30 @@ h1 {
   color: var(--brand);
   font-size: 13px;
   font-weight: 800;
+}
+
+.pin-badge,
+.select-check {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 2;
+}
+
+.pin-badge {
+  border: 1px solid rgba(159, 196, 255, .45);
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: rgba(159, 196, 255, .14);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.select-check {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--brand);
 }
 
 .card-actions {
@@ -434,9 +498,20 @@ label {
   font-weight: 700;
 }
 
+.check-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+}
+
+.check-row input {
+  width: auto;
+  accent-color: var(--brand);
+}
+
 label input,
-label textarea,
-label select {
+label textarea {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -447,9 +522,31 @@ label select {
 }
 
 label input:focus,
-label textarea:focus,
-label select:focus {
+label textarea:focus {
   border-color: var(--brand);
+}
+
+.category-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.category-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.category-options input {
+  width: auto;
+  accent-color: var(--brand);
 }
 
 .ghost {

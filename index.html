@@ -43,6 +43,30 @@
       </button>
     </section>
 
+    <section class="action-bar" aria-label="Aksi shortcut">
+      <button class="secondary-btn" id="exportBtn" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+        Export
+      </button>
+      <button class="secondary-btn" id="importBtn" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M17 8l-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+        Import
+      </button>
+      <button class="secondary-btn" id="openAllBtn" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        Open All
+      </button>
+      <button class="secondary-btn" id="selectModeBtn" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        Pilih
+      </button>
+      <button class="primary-btn" id="openSelectedBtn" type="button" hidden>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        Buka Pilihan
+      </button>
+      <input id="importFileInput" type="file" accept="application/json,.json" hidden>
+    </section>
+
     <section class="toolbar" aria-label="Ringkasan shortcut">
       <div class="stat">
         <span id="totalShortcuts">0</span>
@@ -111,17 +135,27 @@
         <input id="logoInput" type="text" placeholder="Emoji, huruf, atau URL gambar">
       </label>
 
+      <label class="check-row">
+        <input id="pinnedInput" type="checkbox">
+        Pin shortcut ke atas
+      </label>
+
       <label>
         Kategori
-        <select id="categoryInput">
-          <option value="Umum">Umum</option>
-          <option value="AI">AI</option>
-          <option value="Hiburan">Hiburan</option>
-          <option value="Coding">Coding</option>
-          <option value="Sosial">Sosial</option>
-          <option value="Kerja">Kerja</option>
-          <option value="Belajar">Belajar</option>
-        </select>
+        <div class="category-options" id="categoryInput">
+          <label><input type="checkbox" value="Umum"> Umum</label>
+          <label><input type="checkbox" value="AI"> AI</label>
+          <label><input type="checkbox" value="Hiburan"> Hiburan</label>
+          <label><input type="checkbox" value="Coding"> Coding</label>
+          <label><input type="checkbox" value="Sosial"> Sosial</label>
+          <label><input type="checkbox" value="Kerja"> Kerja</label>
+          <label><input type="checkbox" value="Belajar"> Belajar</label>
+        </div>
+      </label>
+
+      <label>
+        Catatan
+        <textarea id="noteInput" rows="2" placeholder="Contoh: untuk rangkum materi, coding, hiburan, atau kerja"></textarea>
       </label>
 
       <label>
