@@ -43,26 +43,35 @@
       </button>
     </section>
 
-    <section class="action-bar" aria-label="Aksi shortcut">
-      <button class="secondary-btn" id="exportBtn" type="button">
-        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
-        Export
-      </button>
-      <button class="secondary-btn" id="importBtn" type="button">
-        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M17 8l-5-5-5 5"></path><path d="M12 3v12"></path></svg>
-        Import
-      </button>
-      <button class="secondary-btn" id="openAllBtn" type="button">
-        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-        Open All
-      </button>
-      <button class="secondary-btn" id="selectModeBtn" type="button">
-        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-        Pilih
-      </button>
-      <button class="primary-btn" id="openSelectedBtn" type="button" hidden>
-        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-        Buka Pilihan
+    <section class="action-panel" aria-label="Aksi shortcut">
+      <div class="action-group">
+        <button class="secondary-btn" id="exportBtn" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+          Export
+        </button>
+        <button class="secondary-btn" id="importBtn" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M17 8l-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+          Import
+        </button>
+        <p class="backup-hint">Export backup sebelum reset atau pindah browser.</p>
+      </div>
+      <div class="action-group">
+        <button class="secondary-btn" id="openAllBtn" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          Open All
+        </button>
+        <button class="secondary-btn" id="selectModeBtn" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          Pilih
+        </button>
+        <button class="primary-btn" id="openSelectedBtn" type="button" hidden>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          Buka Pilihan
+        </button>
+      </div>
+      <button class="danger-btn" id="resetBtn" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 15H6L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>
+        Reset
       </button>
       <input id="importFileInput" type="file" accept="application/json,.json" hidden>
     </section>
@@ -90,14 +99,14 @@
       <div class="category-filter" id="categoryFilter" aria-label="Filter kategori shortcut"></div>
       <div class="shortcut-grid" id="shortcutGrid" aria-live="polite"></div>
       <div class="empty-state" id="emptyState" hidden>
-        <h3>Belum ada shortcut</h3>
-        <p>Tambah website favorit Ucup supaya bisa dibuka sekali klik.</p>
+        <h3 id="emptyTitle">Belum ada shortcut</h3>
+        <p id="emptyText">Tambah website favorit Ucup supaya bisa dibuka sekali klik.</p>
       </div>
     </section>
   </main>
 
   <footer class="app-footer">
-    <span>&copy; 2026 shortcut_ucup</span>
+    <span>&copy; 2026 shortcut_ucup <b id="appVersion">v1.4.0</b></span>
     <div>
       <a href="#">Privacy</a>
       <a href="#">Help</a>
@@ -143,14 +152,14 @@
 
         <label>
           Kategori
-          <div class="category-options" id="categoryInput">
-            <label><input type="checkbox" value="Umum"> Umum</label>
-            <label><input type="checkbox" value="AI"> AI</label>
-            <label><input type="checkbox" value="Hiburan"> Hiburan</label>
-            <label><input type="checkbox" value="Coding"> Coding</label>
-            <label><input type="checkbox" value="Sosial"> Sosial</label>
-            <label><input type="checkbox" value="Kerja"> Kerja</label>
-            <label><input type="checkbox" value="Belajar"> Belajar</label>
+          <div class="category-options" id="categoryInput"></div>
+        </label>
+
+        <label>
+          Kategori Baru
+          <div class="inline-field">
+            <input id="newCategoryInput" type="text" placeholder="Contoh: AI Gambar">
+            <button class="secondary-btn" id="addCategoryBtn" type="button">Tambah</button>
           </div>
         </label>
 

@@ -1,5 +1,7 @@
 const STORAGE_KEY = "shortcut_ucup.shortcuts";
 const THEME_KEY = "shortcut_ucup.theme";
+const CATEGORY_KEY = "shortcut_ucup.categories";
+const DEFAULT_CATEGORIES = ["Umum", "AI", "Hiburan", "Coding", "Sosial", "Kerja", "Belajar"];
 
 const defaultShortcuts = [
   {
@@ -40,6 +42,8 @@ const defaultShortcuts = [
 const grid = document.querySelector("#shortcutGrid");
 const categoryFilter = document.querySelector("#categoryFilter");
 const emptyState = document.querySelector("#emptyState");
+const emptyTitle = document.querySelector("#emptyTitle");
+const emptyText = document.querySelector("#emptyText");
 const searchInput = document.querySelector("#searchInput");
 const totalShortcuts = document.querySelector("#totalShortcuts");
 const storedSessions = document.querySelector("#storedSessions");
@@ -53,6 +57,8 @@ const nameInput = document.querySelector("#nameInput");
 const urlInput = document.querySelector("#urlInput");
 const logoInput = document.querySelector("#logoInput");
 const categoryInput = document.querySelector("#categoryInput");
+const newCategoryInput = document.querySelector("#newCategoryInput");
+const addCategoryBtn = document.querySelector("#addCategoryBtn");
 const pinnedInput = document.querySelector("#pinnedInput");
 const noteInput = document.querySelector("#noteInput");
 const sessionInput = document.querySelector("#sessionInput");
@@ -68,8 +74,10 @@ const importFileInput = document.querySelector("#importFileInput");
 const openAllBtn = document.querySelector("#openAllBtn");
 const selectModeBtn = document.querySelector("#selectModeBtn");
 const openSelectedBtn = document.querySelector("#openSelectedBtn");
+const resetBtn = document.querySelector("#resetBtn");
 
 let shortcuts = loadShortcuts();
+let customCategories = loadCustomCategories();
 let searchTerm = "";
 let activeCategory = "Semua";
 let selectMode = false;
@@ -93,6 +101,8 @@ importFileInput.addEventListener("change", importBackup);
 openAllBtn.addEventListener("click", openAllVisibleShortcuts);
 selectModeBtn.addEventListener("click", toggleSelectMode);
 openSelectedBtn.addEventListener("click", openSelectedShortcuts);
+addCategoryBtn.addEventListener("click", addCustomCategory);
+resetBtn.addEventListener("click", resetDashboard);
 modalBackdrop.addEventListener("click", (event) => {
   if (event.target === modalBackdrop) closeDialog();
 });
@@ -163,6 +173,7 @@ function renderShortcuts() {
   totalShortcuts.textContent = String(shortcuts.length);
   storedSessions.textContent = String(shortcuts.filter((shortcut) => shortcut.session).length);
   emptyState.hidden = visibleShortcuts.length > 0;
+  updateEmptyState();
   resultInfo.textContent = getResultText(visibleShortcuts.length);
   openSelectedBtn.hidden = !selectMode;
   openSelectedBtn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>${selectedIds.size ? `Buka Pilihan (${selectedIds.size})` : "Buka Pilihan"}`;
@@ -214,6 +225,10 @@ function createShortcutCard(shortcut) {
     createActionButton(shortcut.pinned ? "Unpin" : "Pin", "M12 17v5M5 3h14l-2 6 2 6H5l2-6-2-6Z", (event) => {
       event.stopPropagation();
       togglePin(shortcut.id);
+    }),
+    createActionButton("Duplicate", "M8 8h10v10H8zM6 16H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1", (event) => {
+      event.stopPropagation();
+      duplicateShortcut(shortcut);
     }),
     createActionButton("Edit", "M13 6h5m-2.5-2.5 5 5L8 21H3v-5L15.5 3.5Z", (event) => {
       event.stopPropagation();
@@ -317,18 +332,15 @@ function openShortcutGroup(items) {
   let blockedCount = 0;
 
   items.forEach((shortcut) => {
-    const tab = window.open("about:blank", "_blank");
+    const targetName = `shortcut_ucup_${shortcut.id}_${Date.now()}`;
+    const tab = window.open(normalizeUrl(shortcut.url), targetName);
     if (!tab) {
       blockedCount += 1;
-      return;
     }
-
-    tab.opener = null;
-    tab.location.href = normalizeUrl(shortcut.url);
   });
 
   if (blockedCount > 0) {
-    window.alert(`${blockedCount} tab gagal dibuka. Izinkan pop-up untuk website ini lalu coba lagi.`);
+    window.alert(`${blockedCount} tab gagal dibuka. Klik ikon pop-up blocked di address bar, lalu izinkan pop-up untuk website ini.`);
   }
 }
 
@@ -336,6 +348,7 @@ function openCreateDialog() {
   dialogTitle.textContent = "Tambah Shortcut";
   form.reset();
   shortcutId.value = "";
+  renderCategoryOptions();
   setSelectedCategories(["Umum"]);
   pinnedInput.checked = false;
   modalBackdrop.hidden = false;
@@ -348,6 +361,7 @@ function openEditDialog(shortcut) {
   nameInput.value = shortcut.name;
   urlInput.value = shortcut.url;
   logoInput.value = shortcut.logo;
+  renderCategoryOptions();
   setSelectedCategories(getShortcutCategories(shortcut));
   pinnedInput.checked = Boolean(shortcut.pinned);
   noteInput.value = shortcut.note || "";
@@ -386,13 +400,31 @@ function getInitial(name) {
 
 function getResultText(count) {
   if (count === 0 && searchTerm) return "Tidak ada shortcut yang cocok.";
+  if (count === 0 && activeCategory !== "Semua") return `Belum ada shortcut ${activeCategory}.`;
   if (count === 0) return "Tambah shortcut pertama Ucup.";
   if (searchTerm || activeCategory !== "Semua") return `${count} shortcut ditemukan.`;
   return "Semua shortcut siap dibuka.";
 }
 
+function updateEmptyState() {
+  if (searchTerm) {
+    emptyTitle.textContent = "Shortcut tidak ditemukan";
+    emptyText.textContent = `Tidak ada hasil untuk pencarian "${searchInput.value.trim()}".`;
+    return;
+  }
+
+  if (activeCategory !== "Semua") {
+    emptyTitle.textContent = `Belum ada shortcut ${activeCategory}`;
+    emptyText.textContent = `Tambah shortcut baru atau pilih kategori ${activeCategory} saat edit shortcut.`;
+    return;
+  }
+
+  emptyTitle.textContent = "Belum ada shortcut";
+  emptyText.textContent = "Tambah website favorit Ucup supaya bisa dibuka sekali klik.";
+}
+
 function renderCategoryFilter() {
-  const categories = ["Semua", ...new Set(shortcuts.flatMap(getShortcutCategories))];
+  const categories = ["Semua", ...getAllCategories()];
   if (!categories.includes(activeCategory)) activeCategory = "Semua";
 
   categoryFilter.innerHTML = "";
@@ -409,15 +441,65 @@ function renderCategoryFilter() {
   });
 }
 
-function normalizeShortcut(shortcut) {
+function normalizeShortcut(shortcut, index = 0) {
   return {
     id: shortcut.id || Date.now(),
     name: shortcut.name || "Shortcut",
     url: shortcut.url || "#",
     logo: shortcut.logo || "",
     categories: getShortcutCategories(shortcut),
+    pinned: Boolean(shortcut.pinned),
+    note: shortcut.note || "",
+    order: shortcut.order || index + 1,
     session: shortcut.session || ""
   };
+}
+
+function loadCustomCategories() {
+  const saved = localStorage.getItem(CATEGORY_KEY);
+  if (!saved) return [];
+
+  try {
+    const parsed = JSON.parse(saved);
+    return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCustomCategories() {
+  localStorage.setItem(CATEGORY_KEY, JSON.stringify(customCategories));
+}
+
+function getAllCategories() {
+  return [...new Set([...DEFAULT_CATEGORIES, ...customCategories, ...shortcuts.flatMap(getShortcutCategories)])];
+}
+
+function renderCategoryOptions() {
+  categoryInput.innerHTML = "";
+  getAllCategories().forEach((category) => {
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = category;
+    label.append(checkbox, ` ${category}`);
+    categoryInput.appendChild(label);
+  });
+}
+
+function addCustomCategory() {
+  const category = newCategoryInput.value.trim();
+  if (!category) return;
+
+  const exists = getAllCategories().some((item) => item.toLowerCase() === category.toLowerCase());
+  if (!exists) {
+    customCategories.push(category);
+    saveCustomCategories();
+  }
+
+  renderCategoryOptions();
+  setSelectedCategories([...getSelectedCategories(), category]);
+  newCategoryInput.value = "";
 }
 
 function guessCategories(name = "", url = "") {
@@ -479,6 +561,20 @@ function togglePin(id) {
   renderShortcuts();
 }
 
+function duplicateShortcut(source) {
+  const copy = normalizeShortcut({
+    ...source,
+    id: Date.now(),
+    name: `${source.name} copy`,
+    pinned: false,
+    order: getNextOrder()
+  });
+
+  shortcuts.unshift(copy);
+  saveShortcuts();
+  renderShortcuts();
+}
+
 function moveShortcut(dragId, targetId) {
   const ordered = [...shortcuts].sort(sortShortcuts);
   const fromIndex = ordered.findIndex((shortcut) => shortcut.id === dragId);
@@ -534,9 +630,6 @@ function importBackup(event) {
 function openAllVisibleShortcuts() {
   const visible = getVisibleShortcuts();
   if (!visible.length) return;
-
-  const confirmed = window.confirm(`Buka ${visible.length} shortcut yang sedang tampil?`);
-  if (!confirmed) return;
   openShortcutGroup(visible);
 }
 
@@ -565,5 +658,19 @@ function openSelectedShortcuts() {
   openShortcutGroup(selected);
   selectedIds.clear();
   selectMode = false;
+  renderShortcuts();
+}
+
+function resetDashboard() {
+  const confirmed = window.confirm("Apa kamu yakin reset semua shortcut? Pilih OK untuk Ya, Cancel untuk Tidak.");
+  if (!confirmed) return;
+
+  shortcuts = defaultShortcuts.map(normalizeShortcut);
+  customCategories = [];
+  selectedIds.clear();
+  activeCategory = "Semua";
+  selectMode = false;
+  saveShortcuts();
+  saveCustomCategories();
   renderShortcuts();
 }
