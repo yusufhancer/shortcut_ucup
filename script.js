@@ -313,6 +313,25 @@ function openShortcut(url) {
   window.open(normalizeUrl(url), "_blank", "noopener,noreferrer");
 }
 
+function openShortcutGroup(items) {
+  let blockedCount = 0;
+
+  items.forEach((shortcut) => {
+    const tab = window.open("about:blank", "_blank");
+    if (!tab) {
+      blockedCount += 1;
+      return;
+    }
+
+    tab.opener = null;
+    tab.location.href = normalizeUrl(shortcut.url);
+  });
+
+  if (blockedCount > 0) {
+    window.alert(`${blockedCount} tab gagal dibuka. Izinkan pop-up untuk website ini lalu coba lagi.`);
+  }
+}
+
 function openCreateDialog() {
   dialogTitle.textContent = "Tambah Shortcut";
   form.reset();
@@ -518,7 +537,7 @@ function openAllVisibleShortcuts() {
 
   const confirmed = window.confirm(`Buka ${visible.length} shortcut yang sedang tampil?`);
   if (!confirmed) return;
-  visible.forEach((shortcut) => openShortcut(shortcut.url));
+  openShortcutGroup(visible);
 }
 
 function toggleSelectMode() {
@@ -543,7 +562,7 @@ function openSelectedShortcuts() {
     return;
   }
 
-  selected.forEach((shortcut) => openShortcut(shortcut.url));
+  openShortcutGroup(selected);
   selectedIds.clear();
   selectMode = false;
   renderShortcuts();
