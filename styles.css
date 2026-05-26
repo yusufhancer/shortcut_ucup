@@ -1,0 +1,476 @@
+:root {
+  color-scheme: dark;
+  --bg: #080f1f;
+  --surface: #131b2d;
+  --surface-2: #182135;
+  --line: #3b455a;
+  --text: #e8eefc;
+  --muted: #a4adbf;
+  --brand: #9fc4ff;
+  --brand-strong: #7db2ff;
+  --danger: #ff7777;
+  --shadow: 0 18px 42px rgba(0, 0, 0, .32);
+}
+
+:root.light {
+  color-scheme: light;
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-2: #edf3ff;
+  --line: #d4dcea;
+  --text: #172033;
+  --muted: #5c6678;
+  --brand: #266ed8;
+  --brand-strong: #1358bd;
+  --danger: #c63333;
+  --shadow: 0 18px 42px rgba(30, 52, 94, .12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.app-header {
+  min-height: 100px;
+  display: grid;
+  grid-template-columns: 220px minmax(260px, 720px) 220px;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 30px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  color: var(--brand);
+  font-weight: 800;
+  font-size: 21px;
+  letter-spacing: 0;
+}
+
+.search-wrap {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 22px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.search-wrap input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+  font-size: 20px;
+}
+
+.search-wrap input::placeholder {
+  color: #808898;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 22px;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  color: var(--brand);
+}
+
+.dashboard {
+  width: min(1440px, 100%);
+  flex: 1;
+  margin: 0 auto;
+  padding: 28px 80px 56px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--brand);
+  font-weight: 800;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: clamp(34px, 5vw, 58px);
+  letter-spacing: 0;
+}
+
+.subtitle {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 21px;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 8px;
+  padding: 0 28px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-btn {
+  border: 1px solid #b9d4ff;
+  background: var(--brand);
+  color: #091426;
+  box-shadow: var(--shadow);
+}
+
+.primary-btn:hover {
+  background: var(--brand-strong);
+}
+
+.secondary-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+}
+
+.danger-btn {
+  border: 1px solid rgba(255, 119, 119, .4);
+  background: rgba(255, 119, 119, .1);
+  color: var(--danger);
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 34px;
+}
+
+.stat {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .02);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.stat span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--brand);
+  font: 700 26px Consolas, "SFMono-Regular", ui-monospace, monospace;
+}
+
+.stat p,
+.section-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.section-head h2 {
+  margin: 0;
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 30px;
+}
+
+.shortcut-card {
+  position: relative;
+  min-height: 174px;
+  display: grid;
+  place-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: center;
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.shortcut-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand);
+  background: var(--surface-2);
+}
+
+.shortcut-logo {
+  width: 82px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: #2b3446;
+  color: #ffffff;
+  font: 800 32px Consolas, "SFMono-Regular", ui-monospace, monospace;
+}
+
+.shortcut-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shortcut-name {
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font: 700 21px Consolas, "SFMono-Regular", ui-monospace, monospace;
+}
+
+.card-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+
+.shortcut-card:hover .card-actions,
+.shortcut-card:focus-within .card-actions {
+  opacity: 1;
+}
+
+.card-actions .icon-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.empty-state {
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  padding: 38px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-state h3 {
+  color: var(--text);
+}
+
+.app-footer {
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 30px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 700 19px Consolas, "SFMono-Regular", ui-monospace, monospace;
+}
+
+.app-footer div {
+  display: flex;
+  gap: 24px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, .58);
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+.shortcut-dialog {
+  width: min(560px, calc(100vw - 32px));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.shortcut-dialog form {
+  display: grid;
+  gap: 18px;
+}
+
+.dialog-head,
+.dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.dialog-head h2 {
+  margin: 0;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+label input,
+label textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: 0;
+  background: var(--bg);
+  color: var(--text);
+  padding: 13px 14px;
+}
+
+label input:focus,
+label textarea:focus {
+  border-color: var(--brand);
+}
+
+.ghost {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .app-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .search-wrap {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .dashboard {
+    padding: 26px 22px 48px;
+  }
+
+  .hero,
+  .section-head,
+  .app-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header {
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .header-actions {
+    gap: 10px;
+  }
+
+  .search-wrap {
+    height: 48px;
+    padding: 0 16px;
+  }
+
+  .search-wrap input {
+    font-size: 16px;
+  }
+
+  .shortcut-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .app-footer div {
+    flex-wrap: wrap;
+  }
+}
