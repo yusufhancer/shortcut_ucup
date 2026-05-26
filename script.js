@@ -7,6 +7,7 @@ const defaultShortcuts = [
     name: "Google",
     url: "https://www.google.com",
     logo: "G",
+    category: "Umum",
     session: ""
   },
   {
@@ -14,6 +15,7 @@ const defaultShortcuts = [
     name: "GitHub",
     url: "https://github.com",
     logo: "https://github.githubassets.com/favicons/favicon.png",
+    category: "Coding",
     session: ""
   },
   {
@@ -21,11 +23,13 @@ const defaultShortcuts = [
     name: "YouTube",
     url: "https://www.youtube.com",
     logo: "https://www.youtube.com/s/desktop/12d6b690/img/favicon_144x144.png",
+    category: "Hiburan",
     session: ""
   }
 ];
 
 const grid = document.querySelector("#shortcutGrid");
+const categoryFilter = document.querySelector("#categoryFilter");
 const emptyState = document.querySelector("#emptyState");
 const searchInput = document.querySelector("#searchInput");
 const totalShortcuts = document.querySelector("#totalShortcuts");
@@ -39,6 +43,7 @@ const shortcutId = document.querySelector("#shortcutId");
 const nameInput = document.querySelector("#nameInput");
 const urlInput = document.querySelector("#urlInput");
 const logoInput = document.querySelector("#logoInput");
+const categoryInput = document.querySelector("#categoryInput");
 const sessionInput = document.querySelector("#sessionInput");
 const addShortcutBtn = document.querySelector("#addShortcutBtn");
 const quickAddBtn = document.querySelector("#quickAddBtn");
@@ -49,6 +54,7 @@ const profileBtn = document.querySelector("#profileBtn");
 
 let shortcuts = loadShortcuts();
 let searchTerm = "";
+let activeCategory = "Semua";
 
 applySavedTheme();
 renderShortcuts();
@@ -82,6 +88,7 @@ form.addEventListener("submit", (event) => {
     name: nameInput.value.trim(),
     url: normalizeUrl(urlInput.value.trim()),
     logo: logoInput.value.trim(),
+    category: categoryInput.value,
     session: sessionInput.value.trim()
   };
 
@@ -105,7 +112,7 @@ function loadShortcuts() {
 
   try {
     const parsed = JSON.parse(saved);
-    return Array.isArray(parsed) ? parsed : defaultShortcuts;
+    return Array.isArray(parsed) ? parsed.map(normalizeShortcut) : defaultShortcuts;
   } catch {
     return defaultShortcuts;
   }
@@ -117,10 +124,13 @@ function saveShortcuts() {
 
 function renderShortcuts() {
   const visibleShortcuts = shortcuts.filter((shortcut) => {
-    const target = `${shortcut.name} ${shortcut.url}`.toLowerCase();
-    return target.includes(searchTerm);
+    const target = `${shortcut.name} ${shortcut.url} ${shortcut.category}`.toLowerCase();
+    const matchesSearch = target.includes(searchTerm);
+    const matchesCategory = activeCategory === "Semua" || shortcut.category === activeCategory;
+    return matchesSearch && matchesCategory;
   });
 
+  renderCategoryFilter();
   grid.innerHTML = "";
   visibleShortcuts.forEach((shortcut) => {
     grid.appendChild(createShortcutCard(shortcut));
@@ -160,7 +170,11 @@ function createShortcutCard(shortcut) {
   name.className = "shortcut-name";
   name.textContent = shortcut.name;
 
-  card.append(actions, logo, name);
+  const category = document.createElement("p");
+  category.className = "shortcut-category";
+  category.textContent = shortcut.category || "Umum";
+
+  card.append(actions, logo, name, category);
   card.addEventListener("click", () => openShortcut(shortcut.url));
   card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -216,6 +230,7 @@ function openEditDialog(shortcut) {
   nameInput.value = shortcut.name;
   urlInput.value = shortcut.url;
   logoInput.value = shortcut.logo;
+  categoryInput.value = shortcut.category || "Umum";
   sessionInput.value = shortcut.session;
   modalBackdrop.hidden = false;
   nameInput.focus();
@@ -251,8 +266,45 @@ function getInitial(name) {
 function getResultText(count) {
   if (count === 0 && searchTerm) return "Tidak ada shortcut yang cocok.";
   if (count === 0) return "Tambah shortcut pertama Ucup.";
-  if (searchTerm) return `${count} shortcut ditemukan.`;
+  if (searchTerm || activeCategory !== "Semua") return `${count} shortcut ditemukan.`;
   return "Semua shortcut siap dibuka.";
+}
+
+function renderCategoryFilter() {
+  const categories = ["Semua", ...new Set(shortcuts.map((shortcut) => shortcut.category || "Umum"))];
+  if (!categories.includes(activeCategory)) activeCategory = "Semua";
+
+  categoryFilter.innerHTML = "";
+  categories.forEach((category) => {
+    const button = document.createElement("button");
+    button.className = `category-chip${category === activeCategory ? " active" : ""}`;
+    button.type = "button";
+    button.textContent = category;
+    button.addEventListener("click", () => {
+      activeCategory = category;
+      renderShortcuts();
+    });
+    categoryFilter.appendChild(button);
+  });
+}
+
+function normalizeShortcut(shortcut) {
+  return {
+    id: shortcut.id || Date.now(),
+    name: shortcut.name || "Shortcut",
+    url: shortcut.url || "#",
+    logo: shortcut.logo || "",
+    category: shortcut.category || guessCategory(shortcut.name, shortcut.url),
+    session: shortcut.session || ""
+  };
+}
+
+function guessCategory(name = "", url = "") {
+  const target = `${name} ${url}`.toLowerCase();
+  if (target.includes("chatgpt") || target.includes("openai") || target.includes("gemini") || target.includes("ai")) return "AI";
+  if (target.includes("youtube") || target.includes("netflix") || target.includes("music") || target.includes("game")) return "Hiburan";
+  if (target.includes("github") || target.includes("code") || target.includes("vercel")) return "Coding";
+  return "Umum";
 }
 
 function applySavedTheme() {

@@ -245,6 +245,31 @@ h1 {
   margin: 0;
 }
 
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.category-chip {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 16px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.category-chip:hover,
+.category-chip.active {
+  border-color: var(--brand);
+  background: rgba(159, 196, 255, .13);
+  color: var(--text);
+}
+
 .shortcut-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -294,9 +319,19 @@ h1 {
 
 .shortcut-name {
   max-width: 100%;
-  margin: 0;
+  margin: 0 0 8px;
   overflow-wrap: anywhere;
   font: 700 21px Consolas, "SFMono-Regular", ui-monospace, monospace;
+}
+
+.shortcut-category {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 10px;
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .card-actions {
@@ -400,7 +435,8 @@ label {
 }
 
 label input,
-label textarea {
+label textarea,
+label select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -411,7 +447,8 @@ label textarea {
 }
 
 label input:focus,
-label textarea:focus {
+label textarea:focus,
+label select:focus {
   border-color: var(--brand);
 }
 

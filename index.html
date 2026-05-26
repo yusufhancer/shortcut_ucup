@@ -63,6 +63,7 @@
         <h2>Quick Links</h2>
         <p id="resultInfo">Semua shortcut siap dibuka.</p>
       </div>
+      <div class="category-filter" id="categoryFilter" aria-label="Filter kategori shortcut"></div>
       <div class="shortcut-grid" id="shortcutGrid" aria-live="polite"></div>
       <div class="empty-state" id="emptyState" hidden>
         <h3>Belum ada shortcut</h3>
@@ -108,6 +109,19 @@
       <label>
         Logo
         <input id="logoInput" type="text" placeholder="Emoji, huruf, atau URL gambar">
+      </label>
+
+      <label>
+        Kategori
+        <select id="categoryInput">
+          <option value="Umum">Umum</option>
+          <option value="AI">AI</option>
+          <option value="Hiburan">Hiburan</option>
+          <option value="Coding">Coding</option>
+          <option value="Sosial">Sosial</option>
+          <option value="Kerja">Kerja</option>
+          <option value="Belajar">Belajar</option>
+        </select>
       </label>
 
       <label>
