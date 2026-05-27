@@ -264,7 +264,7 @@ function createShortcutCard(shortcut) {
       toggleShortcutSelection(shortcut.id);
       return;
     }
-    openShortcut(shortcut.url);
+    openShortcut(getOpenUrl(shortcut));
   });
   card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -272,7 +272,7 @@ function createShortcutCard(shortcut) {
       if (selectMode) {
         toggleShortcutSelection(shortcut.id);
       } else {
-        openShortcut(shortcut.url);
+        openShortcut(getOpenUrl(shortcut));
       }
     }
   });
@@ -328,12 +328,18 @@ function openShortcut(url) {
   window.open(normalizeUrl(url), "_blank", "noopener,noreferrer");
 }
 
+function getOpenUrl(shortcut) {
+  const sessionValue = (shortcut.session || "").trim();
+  if (/^https?:\/\//i.test(sessionValue)) return sessionValue;
+  return shortcut.url;
+}
+
 function openShortcutGroup(items) {
   let blockedCount = 0;
 
   items.forEach((shortcut) => {
     const targetName = `shortcut_ucup_${shortcut.id}_${Date.now()}`;
-    const tab = window.open(normalizeUrl(shortcut.url), targetName);
+    const tab = window.open(normalizeUrl(getOpenUrl(shortcut)), targetName);
     if (!tab) {
       blockedCount += 1;
     }
