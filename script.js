@@ -264,7 +264,7 @@ function createShortcutCard(shortcut) {
       toggleShortcutSelection(shortcut.id);
       return;
     }
-    openShortcut(getOpenUrl(shortcut));
+    openShortcut(getOpenUrl(shortcut), shortcut);
   });
   card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -272,7 +272,7 @@ function createShortcutCard(shortcut) {
       if (selectMode) {
         toggleShortcutSelection(shortcut.id);
       } else {
-        openShortcut(getOpenUrl(shortcut));
+        openShortcut(getOpenUrl(shortcut), shortcut);
       }
     }
   });
@@ -324,14 +324,29 @@ function fillLogo(container, shortcut) {
   container.textContent = shortcut.logo || getInitial(shortcut.name);
 }
 
-function openShortcut(url) {
+function openShortcut(url, shortcut) {
+  if (shortcut && shortcut.session && shortcut.session.trim().startsWith("session_paste ")) {
+    const token = shortcut.session.trim().replace("session_paste ", "").trim();
+    navigator.clipboard.writeText(token).then(() => {
+      window.open(normalizeUrl(shortcut.url), "_blank", "noopener,noreferrer");
+    }).catch(() => {
+      window.open(normalizeUrl(shortcut.url), "_blank", "noopener,noreferrer");
+    });
+    return;
+  }
   window.open(normalizeUrl(url), "_blank", "noopener,noreferrer");
 }
 
 function getOpenUrl(shortcut) {
   const sessionValue = (shortcut.session || "").trim();
-  if (/^https?:\/\//i.test(sessionValue)) return sessionValue;
+  const sessionUrl = extractFirstUrl(sessionValue);
+  if (sessionUrl) return sessionUrl;
   return shortcut.url;
+}
+
+function extractFirstUrl(value) {
+  const match = value.match(/https?:\/\/[^\s"'<>]+/i);
+  return match ? match[0] : "";
 }
 
 function openShortcutGroup(items) {
